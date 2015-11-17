@@ -839,13 +839,14 @@ var app = {
             {
                 PrintLog(1,  "Msg Send: Limit Printing request" );
                 WriteAddrReq( NXTY_PCCTRL_CLOUD_INFO, CLOUD_INFO_MIN_TRAFFIC_CMD );
-            
+                        PrintLog(1, "1");
                 // Start the spinner..
                 bUniiUp = true;
                 SpinnerStart( "", "Limit Printing command sent to unit." );
                 szSuccess = "Limit Printing should now be set...";
                 msgTimer = setTimeout(app.handleRespnose, 1000);
                 retryObject = app.handleLimitPrintingKey;
+                        PrintLog(1, "2");
             }
         }
         else
@@ -1007,25 +1008,31 @@ var app = {
             }
             else
             {
+                                    PrintLog(1, "retryObject=" + retryObject.toString());
                 if( retryObject == app.handleLimitPrintingKey )
                 {
+                                        PrintLog(1, "3");
                     if((window.msgRxLastCmd == NXTY_WRITE_ADDRESS_RSP) && bWriteAddrRsp)
                     {
                         SpinnerStop();
                         showAlert(szSuccess, "Success");
                         retryCount = 0;
+                                                PrintLog(1, "4");
                     }
                     else if(++retryCount < 4)
                     {
                         PrintLog(1, "Retrying..." );
                         setTimeout(retryObject, 1000);
+                                                PrintLog(1, "5");
                     }
                     else
                     {
                         SpinnerStop();
                         showAlert("Limit Printing request did not receive a successful response, no more retries...", "Failure");
                         retryCount = 0;
+                                                PrintLog(1, "6");
                     }
+                                            PrintLog(1, "7 retryCOunt="+retryCount);
                 }
                 else if ( (retryObject == app.handleEnterRawModeKey) ||
                             (retryObject == app.handleExitRawModeKey) )
