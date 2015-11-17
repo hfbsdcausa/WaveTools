@@ -8,7 +8,7 @@
 
 const   NXTY_PHONE_ICD_VER                = 0x20;
 
-const   NXTY_STD_MSG_SIZE                   = 0x0C;   // 12
+const   NXTY_STD_MSG_SIZE                 = 0x0C;   // 12
 const   NXTY_MED_MSG_SIZE                 = 0x84;   // 132
 const   NXTY_BIG_MSG_SIZE                 = 0xFF;   // 255
 const   NXTY_V2_MAX_MSG_SIZE              = 260;    // 260
@@ -56,8 +56,14 @@ const     NXTY_SUPER_MSG_CANCEL_REDIRECT_UART   = 0x05;
 const     NXTY_SUPER_MSG_SET_ANT_STATE          = 0x06;
 const     NXTY_SUPER_MSG_RESET_ARES             = 0x07;
 const     NXTY_SUPER_MSG_SET_NU_PARAM           = 0x0F;
-
 const   NXTY_SUPER_MSG_RSP                      = 0x53;
+const   NXTY_RAW_MODE_REQ                       = 0x14;
+const     NXTY_RAW_MODE_ENTER                   = 0x01
+const     NXTY_RAW_MODE_EXIT                    = 0x00
+const   NXTY_RAW_MODE_RSP                       = 0x54;
+const   NXTY_RAW_DATA_REQ                       = 0x15;
+const   NXTY_RAW_DATA_IND                       = 0x55;
+
 const   NXTY_SUPER_MSG_PARAM_SEL_ARRAY    = ["0:Xfer Bufr",    "UniqueIdLsd",       "UniqueIdMsd",      "BuildId",         "SWVersion",         
                                              "BoardConfig",    "LinkState",         "FirstConfigDword", "SystemSnLsd",     "SystemSnMsd",
                                              "SelfTestRslt",   "CaptBufferAddress", "ChanListAddress",  "DbgIfVersion",    "CloudBuffAddr",
@@ -94,12 +100,12 @@ const     NXTY_NAK_TYPE_USB_BUSY        = 0x07;
 
 
 
-var    msgRxLastCmd                        = NXTY_INIT;
+var    msgRxLastCmd                     = NXTY_INIT;
 var u8RxBuff                            = new Uint8Array(NXTY_V2_MAX_MSG_SIZE);       // Allow for max V1 msg of 255 bytes or V2 msg of 260 bytes.
 var u8UniqueId                          = new Uint8Array(8)
 var uSendCount                          = 0; 
 
-var uRxBuffIdx                            = 0;
+var uRxBuffIdx                          = 0;
 var uTxMsgNotReadyCnt                   = 0;
 
 
@@ -525,11 +531,6 @@ var nxty = {
         
         switch( uCmd )
         {
-            
-            
-            
-            
-            
             case NXTY_DOWNLOAD_START_RSP:
             {
                PrintLog(1,  "Msg: Download Start Rsp" ); 
@@ -1400,6 +1401,27 @@ var nxty = {
                 }              
                
                 
+                break;
+            }
+            
+            case NXTY_RAW_MODE_RSP: // Response to the request that wanted to enter/exit raw mode
+            {
+                PrintLog(1,  "Msg: Raw Mode Request response=0x" + u8RxBuff[4].toString(16) );
+                if (u8RxBuff[4] == NXTY_RAW_MODE_ENTER)
+                    openNlogFile();
+                else
+                    closeNlogFile();
+                break;
+            }
+            
+            case NXTY_RAW_DATA_IND: //Packet of raw data comming from device
+            {
+                //write payload data to file
+                
+                //                   Raw data of length as found in u8RxBuff[1], 
+                // Rx  ae xx yy 55   50 0  0 0 0 ....  crc
+                //     [0]           [4]        
+                writeNlogFile(u8RxBuff.slice(4, 4+u8RxBuff[1])); //zero based index for start and end of data
                 break;
             }
             

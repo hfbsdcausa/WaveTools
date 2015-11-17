@@ -4,7 +4,7 @@
 //
 //  Description:  Support file which contains all mobile phone file functionality.
 //
-//      OpenFileSyste()
+//      OpenFileSystem()
 //      ReadFile()
 //      WriteFile()
 //          Requires:     <gap:plugin name="org.apache.cordova.file" />
@@ -407,9 +407,82 @@ function onFileTransferFailCB(error)
 // End of Download from Cloud File transfer callbacks..................................................................
 
 
+// Create nlog file and write binary data to it........................................................................
+var bNlogFileWriterOpen = false;
+var bNlogFileWriterBusy = false;
+var objNlogFileWriter = null;
+function openNlogFile()
+{
+    if(g_fileSystemDir != null)
+    {
+        bNlogFileWriterOpen = false;
+        bNlogFileWriterBusy = false;
+        objNlogFileWriter   = null;
+        g_fileSystemDir.getFile( "wavelog.nlog", {create:true, exclusive: true}, onOpenNlogFileWriterSuccessCB, onOpenNlogFileWriterErrorCB );
+    }
+    else
+        PrintLog(99, "Filesystem not open, unable to create NlogFile");
+}
 
+function closeNlogFile()
+{
+    if ( (g_fileSystemDir != null) && bNLogFileOpen)
+    {
+         bNLogFileOpen = false;
+         objNlogFileWriter = null;
+    }
+}
 
+function writeNlogFile(data)
+{
+    if( bNLogFileOpen )
+    {
+        if( bNlogFileWriterBusy == false)
+        {
+            bNlogFileWriterBusy = true;
+            var generatedBlob = new Blob([data]);
+            objNlogFileWriter.write( generatedBlob );
+        }
+    }
+}
 
+function onOpenNlogFileWriterSuccessCB(fE)
+{
+    PrintLog(1, "onOpenNlogFileWriterSuccessCB()");
+    fE.createWriter(onCreateNlogFileWriterSuccessCB, onCreateNlogFileWriterErrorCB);
+}
 
+function onOpenNlogFileWriterErrorCB(e)
+{
+    PrintLog(99, "Unable to open file: wavelog.nlog  Error:" + e.toString() );
+}
 
+function onCreateNlogFileWriterSuccessCB(fW)
+{
+    PrintLog(1, "onCreateNlogFileWriterSuccessCB()");
 
+    fW.onwriteend = onEndNlogFileWriterCB;      // Called when the file is written to
+    fW.onerror    = onErrorNlogFileWriterCB;    // Called when the write has failed
+    fW.seek(fW.length);                         // Move to end of file
+
+    objNlogFileWriter = fW;
+    bNlogFileWriterOpen = true;
+    bNlogFileWriterBusy = false;
+}
+
+function onCreateNlogFileWriterErrorCB(e) 
+{
+    PrintLog(99, "Unable to createWriter for file wavelog.nlog  Error:" + e.toString() );
+}
+
+function onEndNlogFileWriterCB(e)
+{
+    bNlogFileWriterBusy = false;
+}
+
+function onErrorNlogFileWriterCB(e)
+{
+    bNlogFileWriterBusy = false;
+}
+
+// END Create nlog file and write binary data to it....................................................................

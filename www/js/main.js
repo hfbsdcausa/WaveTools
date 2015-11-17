@@ -49,7 +49,7 @@ var szNoStatus              = "No status response from unit so ICD version not k
 // Level  4: Timing loops
 // Level 10: Bluetooth processing.
 // Level 99: Error, print in red.
-var PrintLogLevel = 3;
+var PrintLogLevel = 100;
 
 
 // PrintLog............................................................................................
@@ -808,8 +808,158 @@ var app = {
             showAlert("Bypass CAC not allowed...", "Bluetooth not connected.");
         }
     },
-
     
+    handleLimitPrintingKey: function()
+    {
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Limit Printing key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Limit Printing key retry--------------------------------------");
+        }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
+        }
+        
+        if( isSouthBoundIfCnx )
+        {
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                SpinnerStop();
+                showAlert("Functionality not available", "Outdated PIC image");
+            }
+            else
+            {
+                PrintLog(1,  "Msg Send: Limit Printing request" );
+                WriteAddrReq( NXTY_PCCTRL_CLOUD_INFO, CLOUD_INFO_MIN_TRAFFIC_CMD );
+            
+                // Start the spinner..
+                bUniiUp = true;
+                SpinnerStart( "", "Limit Printing command sent to unit." );
+                szSuccess = "Limit Printing should now be set...";
+                msgTimer = setTimeout(app.handleRespnose, 1000);
+                retryObject = app.handleLimitPrintingKey;
+            }
+        }
+        else
+        {
+            SpinnerStop();
+            showAlert("Limit Printing not allowed...", "Bluetooth not connected.");
+        }
+    },
+    
+    handleEnterRawModeKey: function()
+    {
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Enter Raw Mode key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Enter Raw Mode key retry--------------------------------------");
+        }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
+        }
+        
+        if( isSouthBoundIfCnx )
+        {
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                SpinnerStop();
+                showAlert("Functionality not available", "Outdated PIC image");
+            }
+            else
+            {
+                PrintLog(1,  "Msg Send: Enter Raw Mode request" );
+
+                var i             = 0;
+                var u8TempTxBuff  = new Uint8Array(5);
+                u8TempTxBuff[i++] = NXTY_RAW_MODE_ENTER;
+                
+                nxtyCurrentReq = NXTY_RAW_MODE_REQ;
+                nxty.SendNxtyMsg(NXTY_RAW_MODE_REQ, u8TempTxBuff, i);
+            
+                // Start the spinner..
+                bUniiUp = true;
+                SpinnerStart( "", "Enter Raw Mode command sent to unit." );
+                szSuccess = "Raw Mode should now be set...";
+                msgTimer = setTimeout(app.handleRespnose, 1000);
+                retryObject = app.handleEnterRawModeKey;
+            }
+        }
+        else
+        {
+            SpinnerStop();
+            showAlert("Enter Raw Mode not allowed...", "Bluetooth not connected.");
+        }
+    },
+    
+    handleExitRawModeKey: function()
+    {
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Exit Raw Mode key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Exit Raw Mode key retry--------------------------------------");
+        }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
+        }
+        
+        if( isSouthBoundIfCnx )
+        {
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                SpinnerStop();
+                showAlert("Functionality not available", "Outdated PIC image");
+            }
+            else
+            {
+                PrintLog(1,  "Msg Send: Exit Raw Mode request" );
+
+                var i             = 0;
+                var u8TempTxBuff  = new Uint8Array(5);
+                u8TempTxBuff[i++] = NXTY_RAW_MODE_EXIT;
+                
+                nxtyCurrentReq = NXTY_RAW_MODE_REQ;
+                nxty.SendNxtyMsg(NXTY_RAW_MODE_REQ, u8TempTxBuff, i);
+            
+                // Start the spinner..
+                bUniiUp = true;
+                SpinnerStart( "", "Exit Raw Mode command sent to unit." );
+                szSuccess = "Raw Mode should now be over...";
+                msgTimer = setTimeout(app.handleRespnose, 1000);
+                retryObject = app.handleExitRawModeKey;
+            }
+        }
+        else
+        {
+            SpinnerStop();
+            showAlert("Exit Raw Mode not allowed...", "Bluetooth not connected.");
+        }
+    },
+
+
     // Handle the Register key response
     handleRespnose: function()
     {
@@ -857,7 +1007,48 @@ var app = {
             }
             else
             {
-                if( iNxtySuperMsgRspStatus == NXTY_SUPER_MSG_STATUS_SUCCESS )
+                if( retryObject == app.handleLimitPrintingKey )
+                {
+                    if((window.msgRxLastCmd == NXTY_WRITE_ADDRESS_RSP) && bWriteAddrRsp)
+                    {
+                        SpinnerStop();
+                        showAlert(szSuccess, "Success");
+                        retryCount = 0;
+                    }
+                    else if(++retryCount < 4)
+                    {
+                        PrintLog(1, "Retrying..." );
+                        setTimeout(retryObject, 1000);
+                    }
+                    else
+                    {
+                        SpinnerStop();
+                        showAlert("Limit Printing request did not receive a successful response, no more retries...", "Failure");
+                        retryCount = 0;
+                    }
+                }
+                else if ( (retryObject == app.handleEnterRawModeKey) ||
+                            (retryObject == app.handleExitRawModeKey) )
+                {
+                    if(window.msgRxLastCmd == NXTY_RAW_MODE_RSP)
+                    {
+                        SpinnerStop();
+                        showAlert(szSuccess, "Success");
+                        retryCount = 0;
+                    }
+                    else if(++retryCount < 4)
+                    {
+                        PrintLog(1, "Retrying..." );
+                        setTimeout(retryObject, 1000);
+                    }
+                    else
+                    {
+                        SpinnerStop();
+                        showAlert("Raw Mode request did not receive a successful response, no more retries...", "Failure");
+                        retryCount = 0;
+                    }
+                }
+                else if( iNxtySuperMsgRspStatus == NXTY_SUPER_MSG_STATUS_SUCCESS )
                 {
                     // Stop the spinner...
                     SpinnerStop();
@@ -909,12 +1100,17 @@ var app = {
             "<img src='img/header_main.png' width='100%' />" +
             
                myBluetoothIcon +
-               
-              "<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
-            "<button id='unreg_button_id'       type='button' class='mybutton' onclick='app.handleUnRegKey()'>     <img src='img/button_UnRegister.png' />        </button>" +
-            "<button id='quick_lock_button_id'  type='button' class='mybutton' onclick='app.handleQLockKey()'>     <img src='img/button_QuickLocationLock.png' /> </button>" +
-            "<button id='clear_lock_button_id'  type='button' class='mybutton' onclick='app.handleCLockKey()'>     <img src='img/button_ClearLocationLock.png' /> </button>" +
-            "<button id='bypass_cac_button_id'  type='button' class='mybutton' onclick='app.handleBypassCacKey()'> <img src='img/button_BypassCac.png' />         </button>" +
+
+            "<div style='position:relative; text-align:center;'>" +
+            "<p align='center'><button id='reg_button_id'            type='button' class='mytextbutton' onclick='app.handleRegKey()'          >     Register      </button></p>" +
+            "<p align='center'><button id='unreg_button_id'          type='button' class='mytextbutton' onclick='app.handleUnRegKey()'        >    Un-Register    </button></p>" +
+            "<p align='center'><button id='quick_lock_button_id'     type='button' class='mytextbutton' onclick='app.handleQLockKey()'        >Quick Location Lock</button></p>" +
+            "<p align='center'><button id='clear_lock_button_id'     type='button' class='mytextbutton' onclick='app.handleCLockKey()'        >Clear Location Lock</button></p>" +
+            "<p align='center'><button id='bypass_cac_button_id'     type='button' class='mytextbutton' onclick='app.handleBypassCacKey()'    >     Bypass CAC     </button></p>" +
+            "<p align='center'><button id='limit_printing_button_id' type='button' class='mytextbutton' onclick='app.handleLimitPrintingKey()'>   Reduce Printing  </button></p>" +
+            "<p align='center'><button id='enter_raw_mode_button_id' type='button' class='mytextbutton' onclick='app.handleEnterRawModeKey()' >   Enter Raw Mode   </button></p>" +
+            "<p align='center'><button id='exit_raw_mode_button_id'  type='button' class='mytextbutton' onclick='app.handleExitRawModeKey()'  >   Exit Raw Mode    </button></p>" +
+            "</div>" +
             
 //            szMyRssiLine +
             szMyStatusLine;
@@ -939,6 +1135,15 @@ var app = {
         document.getElementById("bypass_cac_button_id").addEventListener('touchstart', HandleButtonDown );
         document.getElementById("bypass_cac_button_id").addEventListener('touchend',   HandleButtonUp );
         
+        document.getElementById("limit_printing_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("limit_printing_button_id").addEventListener('touchend',   HandleButtonUp );
+
+        document.getElementById("enter_raw_mode_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("enter_raw_mode_button_id").addEventListener('touchend',   HandleButtonUp );
+
+        document.getElementById("exit_raw_mode_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("exit_raw_mode_button_id").addEventListener('touchend',   HandleButtonUp );
+
         uMainLoopCounter = 0;
             
 
