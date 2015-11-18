@@ -442,6 +442,7 @@ function writeNlogFile(data)
             bNlogFileWriterBusy = true;
             var generatedBlob = new Blob([data]);
             objNlogFileWriter.write( generatedBlob );
+            PrintLog(1, "  *start write to binfile");
         }
     }
 }
@@ -478,11 +479,13 @@ function onCreateNlogFileWriterErrorCB(e)
 function onEndNlogFileWriterCB(e)
 {
     bNlogFileWriterBusy = false;
+    PrintLog(1, "  *end write to binfile");
 }
 
 function onErrorNlogFileWriterCB(e)
 {
     bNlogFileWriterBusy = false;
+    PrintLog(1, "  *ERROR, end write to binfile");
 }
 
 // END Create nlog file and write binary data to it....................................................................
