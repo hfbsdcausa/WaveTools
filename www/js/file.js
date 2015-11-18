@@ -418,7 +418,7 @@ function openNlogFile()
         bNlogFileWriterOpen = false;
         bNlogFileWriterBusy = false;
         objNlogFileWriter   = null;
-        g_fileSystemDir.getFile( "wavelog.nlog", {create:true, exclusive: true}, onOpenNlogFileWriterSuccessCB, onOpenNlogFileWriterErrorCB );
+        g_fileSystemDir.getFile( "wavelog.nlog", {create:true, exclusive: false}, onOpenNlogFileWriterSuccessCB, onOpenNlogFileWriterErrorCB );
     }
     else
         PrintLog(99, "Filesystem not open, unable to create NlogFile");

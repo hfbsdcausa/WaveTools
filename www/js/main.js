@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.00";
+var szVersion               = "01.00.01";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -944,20 +944,20 @@ var app = {
                 // Read CloudInfo : this sends command to Ares, it will return the value read in the raw bytes somewhere in NXTY_RAW_DATA_IND
                 // The Read Address sequence
                 regValue     = RX_SEQ_ADDRESS_PATTERN;
-                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                 // The Address to read
-                regValue     = NXTY_PCCTRL_CLOUD_INFO;
-                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                regValue     = NXTY_PCCTRL_GLOBALFLAGS; //NXTY_PCCTRL_CLOUD_INFO;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
 
                 // Write SelParamReg.Val = CloudBuffAddr : this sends the command to Ares, it will return the value in the raw bytes somewhere in NXTY_RAW_DATA_IND
                 regValue     = RX_SEQ_VALUE_PATTERN;
-                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                 regValue     = 0x0000000E;
-                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                 regValue     = RX_SEQ_ADDRESS_PATTERN;
-                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                 regValue     = NXTY_PCCTRL_SELPARAM_REG;
-                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                   //... also need to send RX_SEQ_WRITE_PATTERN but usually only after board confirms the write address, the value we want to write and the previous value (DbgWriteValue, DbgReadAddress, DbgReadValue, DbgReadValue)
                 
                 nxtyCurrentReq = NXTY_RAW_DATA_REQ;
