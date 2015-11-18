@@ -213,6 +213,7 @@ const NU_CLOUD_INFO_CMD_MASK          = 0x0000000F;
 const NU_CLOUD_INFO_CELL_REQ_BIT      = 0x00000001;   // bit 0:  Cell Info:  Set to 1 by PIC/APP to request Cell Info data gather.  NU clears when complete.
 const NU_CLOUD_INFO_REG_REQ_BIT       = 0x00000002;   // bit 1:  Registration Request:  Set to 1 by PIC/APP to request NU to process reg data in buffer. NU clears when complete.
 const NU_CLOUD_INFO_ANT_UPDATE_BIT    = 0x00000004;   // bit 2:  Ant Update:  Set to 1 by PIC/APP to request the NU software to process the antenna settings.  NU clears when complete.
+const CLOUD_INFO_MIN_TRAFFIC_CMD      = 0x07000000;
 
 
 
