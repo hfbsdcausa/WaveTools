@@ -215,7 +215,10 @@ const NU_CLOUD_INFO_REG_REQ_BIT       = 0x00000002;   // bit 1:  Registration Re
 const NU_CLOUD_INFO_ANT_UPDATE_BIT    = 0x00000004;   // bit 2:  Ant Update:  Set to 1 by PIC/APP to request the NU software to process the antenna settings.  NU clears when complete.
 const CLOUD_INFO_MIN_TRAFFIC_CMD      = 0x07000000;
 
-
+// Raw Data Register Access sequences
+const RX_SEQ_ADDRESS_PATTERN          = 0xDDCCBBAA;
+const RX_SEQ_VALUE_PATTERN            = 0x44332211;
+const RX_SEQ_WRITE_PATTERN            = 0xC4C7DE61;
 
 var crc8_table = new Uint8Array([ 
 

@@ -839,14 +839,13 @@ var app = {
             {
                 PrintLog(1,  "Msg Send: Limit Printing request" );
                 WriteAddrReq( NXTY_PCCTRL_CLOUD_INFO, CLOUD_INFO_MIN_TRAFFIC_CMD );
-                        PrintLog(1, "1");
+
                 // Start the spinner..
                 bUniiUp = true;
                 SpinnerStart( "", "Limit Printing command sent to unit." );
                 szSuccess = "Limit Printing should now be set...";
                 msgTimer = setTimeout(app.handleRespnose, 1000);
                 retryObject = app.handleLimitPrintingKey;
-                        PrintLog(1, "2");
             }
         }
         else
@@ -905,6 +904,77 @@ var app = {
         {
             SpinnerStop();
             showAlert("Enter Raw Mode not allowed...", "Bluetooth not connected.");
+        }
+    },
+    
+    handleSendRawDataKey: function()
+    {
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Send Raw Data key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Send Raw Data key retry--------------------------------------");
+        }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
+        }
+        
+        if( isSouthBoundIfCnx )
+        {
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                SpinnerStop();
+                showAlert("Functionality not available", "Outdated PIC image");
+            }
+            else
+            {
+                PrintLog(1,  "Msg Send: Send Raw Data" );
+                
+                var u8TempTxBuff  = new Uint8Array(50);
+                var i             = 0;
+                var regValue      = 0x0;
+                
+                // Read CloudInfo : this sends command to Ares, it will return the value read in the raw bytes somewhere in NXTY_RAW_DATA_IND
+                // The Read Address sequence
+                regValue     = RX_SEQ_ADDRESS_PATTERN;
+                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                // The Address to read
+                regValue     = NXTY_PCCTRL_CLOUD_INFO;
+                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+
+                // Write SelParamReg.Val = CloudBuffAddr : this sends the command to Ares, it will return the value in the raw bytes somewhere in NXTY_RAW_DATA_IND
+                regValue     = RX_SEQ_VALUE_PATTERN;
+                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                regValue     = 0x0000000E;
+                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                regValue     = RX_SEQ_ADDRESS_PATTERN;
+                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                regValue     = NXTY_PCCTRL_SELPARAM_REG;
+                  u8TempTxBuff[i++] = (regValue >> 24);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = regValue;
+                  //... also need to send RX_SEQ_WRITE_PATTERN but usually only after board confirms the write address, the value we want to write and the previous value (DbgWriteValue, DbgReadAddress, DbgReadValue, DbgReadValue)
+                
+                nxtyCurrentReq = NXTY_RAW_DATA_REQ;
+                nxty.SendNxtyMsg(NXTY_RAW_DATA_REQ, u8TempTxBuff, i);
+            
+                // Start the spinner..
+                bUniiUp = true;
+                SpinnerStart( "", "Send Raw Data command sent to unit." );
+                szSuccess = "Send Raw Data to unit...";
+                msgTimer = setTimeout(app.handleRespnose, 1000);
+                retryObject = app.handleSendRawDataKey;
+            }
+        }
+        else
+        {
+            SpinnerStop();
+            showAlert("Send Raw Data not allowed...", "Bluetooth not connected.");
         }
     },
     
@@ -1008,31 +1078,25 @@ var app = {
             }
             else
             {
-                                    PrintLog(1, "retryObject=" + retryObject.toString());
                 if( retryObject == app.handleLimitPrintingKey )
                 {
-                                        PrintLog(1, "3");
                     if((window.msgRxLastCmd == NXTY_WRITE_ADDRESS_RSP) && bWriteAddrRsp)
                     {
                         SpinnerStop();
                         showAlert(szSuccess, "Success");
                         retryCount = 0;
-                                                PrintLog(1, "4");
                     }
                     else if(++retryCount < 4)
                     {
                         PrintLog(1, "Retrying..." );
                         setTimeout(retryObject, 1000);
-                                                PrintLog(1, "5");
                     }
                     else
                     {
                         SpinnerStop();
                         showAlert("Limit Printing request did not receive a successful response, no more retries...", "Failure");
                         retryCount = 0;
-                                                PrintLog(1, "6");
                     }
-                                            PrintLog(1, "7 retryCOunt="+retryCount);
                 }
                 else if ( (retryObject == app.handleEnterRawModeKey) ||
                             (retryObject == app.handleExitRawModeKey) )
@@ -1116,6 +1180,7 @@ var app = {
             "<p align='center'><button id='bypass_cac_button_id'     type='button' class='mytextbutton' onclick='app.handleBypassCacKey()'    >     Bypass CAC     </button></p>" +
             "<p align='center'><button id='limit_printing_button_id' type='button' class='mytextbutton' onclick='app.handleLimitPrintingKey()'>   Reduce Printing  </button></p>" +
             "<p align='center'><button id='enter_raw_mode_button_id' type='button' class='mytextbutton' onclick='app.handleEnterRawModeKey()' >   Enter Raw Mode   </button></p>" +
+            "<p align='center'><button id='send_raw_data_button_id'  type='button' class='mytextbutton' onclick='app.handleSendRawDataKey()'  >   Send Raw Data    </button></p>" +
             "<p align='center'><button id='exit_raw_mode_button_id'  type='button' class='mytextbutton' onclick='app.handleExitRawModeKey()'  >   Exit Raw Mode    </button></p>" +
             "</div>" +
             
@@ -1147,6 +1212,9 @@ var app = {
 
         document.getElementById("enter_raw_mode_button_id").addEventListener('touchstart', HandleButtonDown );
         document.getElementById("enter_raw_mode_button_id").addEventListener('touchend',   HandleButtonUp );
+        
+        document.getElementById("send_raw_data_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("send_raw_data_button_id").addEventListener('touchend',   HandleButtonUp );
 
         document.getElementById("exit_raw_mode_button_id").addEventListener('touchstart', HandleButtonDown );
         document.getElementById("exit_raw_mode_button_id").addEventListener('touchend',   HandleButtonUp );
