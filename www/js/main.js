@@ -974,7 +974,7 @@ var app = {
                 // Deliver byte sequece
                 nxtyCurrentReq = NXTY_RAW_DATA_REQ;
                 nxty.SendNxtyMsg(NXTY_RAW_DATA_REQ, u8TempTxBuff, i);
-                window.msgRxLastCmd = NXTY_RAW_DATA_REQ; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
+                window.msgRxLastCmd = NXTY_RAW_DATA_IND; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
             
                 // Start the spinner..
                 bUniiUp = true;
@@ -1131,6 +1131,12 @@ var app = {
                         showAlert("Raw Mode request did not receive a successful response, no more retries...", "Failure");
                         retryCount = 0;
                     }
+                }
+                else if( retryObject == app.handleSendRawDataKey)
+                {
+                    SpinnerStop();
+                    showAlert(szSuccess, "Success");
+                    retryCount = 0;
                 }
                 else if( iNxtySuperMsgRspStatus == NXTY_SUPER_MSG_STATUS_SUCCESS )
                 {
