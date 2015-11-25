@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.03";
+var szVersion               = "01.00.04";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -974,6 +974,7 @@ var app = {
                 // Deliver byte sequece
                 nxtyCurrentReq = NXTY_RAW_DATA_REQ;
                 nxty.SendNxtyMsg(NXTY_RAW_DATA_REQ, u8TempTxBuff, i);
+                window.msgRxLastCmd = NXTY_RAW_DATA_REQ; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
             
                 // Start the spinner..
                 bUniiUp = true;
