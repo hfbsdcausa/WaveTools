@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.02";
+var szVersion               = "01.00.03";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -959,7 +959,19 @@ var app = {
                 regValue     = NXTY_PCCTRL_SELPARAM_REG;
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                   //... also need to send RX_SEQ_WRITE_PATTERN but usually only after board confirms the write address, the value we want to write and the previous value (DbgWriteValue, DbgReadAddress, DbgReadValue, DbgReadValue)
-                
+                regValue     = RX_SEQ_WRITE_PATTERN;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
+                  
+                // Read NXTY_PCCTRL_SELPARAM_REG to check that our value is there
+                // The Read Address sequence
+                regValue     = RX_SEQ_ADDRESS_PATTERN;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
+                // The Address to read
+                regValue     = NXTY_PCCTRL_SELPARAM_REG;
+                  u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
+
+
+                // Deliver byte sequece
                 nxtyCurrentReq = NXTY_RAW_DATA_REQ;
                 nxty.SendNxtyMsg(NXTY_RAW_DATA_REQ, u8TempTxBuff, i);
             

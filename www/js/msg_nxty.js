@@ -576,7 +576,7 @@ var nxty = {
                 UpdateStatusLine( "Wavetools ver: " + szVersion + " ICD: 0x" + nxtyRxStatusIcd.toString(16) );
                 
                 break;
-               }
+            }
         
         
             case NXTY_CONTROL_WRITE_RSP:
