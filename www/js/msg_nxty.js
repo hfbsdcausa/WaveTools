@@ -1411,11 +1411,6 @@ var nxty = {
             case NXTY_RAW_MODE_RSP: // Response to the request that wanted to enter/exit raw mode
             {
                 PrintLog(1,  "Msg: Raw Mode Request response=0x" + u8RxBuff[4].toString(16) );
-                if (u8RxBuff[4] == NXTY_RAW_MODE_ENTER)
-                    openNlogFile();
-                else
-                    closeNlogFile();
-                break;
             }
             
             case NXTY_RAW_DATA_IND: //Packet of raw data comming from device

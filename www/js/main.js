@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.05";
+var szVersion               = "01.00.06";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -884,6 +884,9 @@ var app = {
             else
             {
                 PrintLog(1,  "Msg Send: Enter Raw Mode request" );
+                
+                openNlogFile(); // Open the .nlog file
+
 
                 var i             = 0;
                 var u8TempTxBuff  = new Uint8Array(5);
@@ -891,6 +894,7 @@ var app = {
                 
                 nxtyCurrentReq = NXTY_RAW_MODE_REQ;
                 nxty.SendNxtyMsg(NXTY_RAW_MODE_REQ, u8TempTxBuff, i);
+                window.msgRxLastCmd = NXTY_RAW_MODE_RSP; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
             
                 // Start the spinner..
                 bUniiUp = true;
@@ -1021,12 +1025,15 @@ var app = {
             {
                 PrintLog(1,  "Msg Send: Exit Raw Mode request" );
 
+                closeNlogFile(); // close the .nlog file
+
                 var i             = 0;
                 var u8TempTxBuff  = new Uint8Array(5);
                 u8TempTxBuff[i++] = NXTY_RAW_MODE_EXIT;
                 
                 nxtyCurrentReq = NXTY_RAW_MODE_REQ;
                 nxty.SendNxtyMsg(NXTY_RAW_MODE_REQ, u8TempTxBuff, i);
+                window.msgRxLastCmd = NXTY_RAW_MODE_RSP; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
             
                 // Start the spinner..
                 bUniiUp = true;
@@ -1112,27 +1119,8 @@ var app = {
                     }
                 }
                 else if ( (retryObject == app.handleEnterRawModeKey) ||
-                            (retryObject == app.handleExitRawModeKey) )
-                {
-                    if(window.msgRxLastCmd == NXTY_RAW_MODE_RSP)
-                    {
-                        SpinnerStop();
-                        showAlert(szSuccess, "Success");
-                        retryCount = 0;
-                    }
-                    else if(++retryCount < 4)
-                    {
-                        PrintLog(1, "Retrying..." );
-                        setTimeout(retryObject, 1000);
-                    }
-                    else
-                    {
-                        SpinnerStop();
-                        showAlert("Raw Mode request did not receive a successful response, no more retries...", "Failure");
-                        retryCount = 0;
-                    }
-                }
-                else if( retryObject == app.handleSendRawDataKey)
+                            (retryObject == app.handleExitRawModeKey) ||
+                            (retryObject == app.handleSendRawDataKey) )
                 {
                     SpinnerStop();
                     showAlert(szSuccess, "Success");
