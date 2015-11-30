@@ -444,6 +444,8 @@ function writeNlogFile(data)
             objNlogFileWriter.write( generatedBlob );
             PrintLog(1, "  *start write to binfile");
         }
+        else
+            PrintLog(1, "  *start write to binfile failed:still busy");
     }
 }
 
