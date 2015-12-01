@@ -422,7 +422,7 @@ function openNlogFile()
         PrintLog(99, "Filesystem not open, unable to create NlogFile");
 }
 
-function deleteNlogFile()
+/*function deleteNlogFile()
 {
     if(g_fileSystemDir != null)
     {
@@ -442,7 +442,7 @@ function deleteNlogFile()
                 PrintLog(99, " Could not delete 'wavelog.nlog' file:" + e.code);
             });
     }
-}
+}*/
 
 function closeNlogFile()
 {
