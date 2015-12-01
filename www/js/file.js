@@ -426,9 +426,9 @@ function openNlogFile()
 
 function closeNlogFile()
 {
-    if ( (g_fileSystemDir != null) && bNLogFileOpen)
+    if ( (g_fileSystemDir != null) && bNlogFileWriterOpen)
     {
-         bNLogFileOpen = false;
+         bNlogFileWriterOpen = false;
          objNlogFileWriter = null;
     }
 }
@@ -436,7 +436,7 @@ function closeNlogFile()
 function writeNlogFile(data)
 {
 PrintLog(1, "RD 3");
-    if( bNLogFileOpen )
+    if( bNlogFileWriterOpen )
     {
     PrintLog(1, "RD 5");
         if( bNlogFileWriterBusy == false)
