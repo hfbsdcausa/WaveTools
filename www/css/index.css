@@ -151,12 +151,12 @@ td {background-color:#56A0D3; text-align: center; opacity: 0.85; border: 1px sol
 /* http://css3gen.com/button-generator */
 .mytextbutton{
 color: rgb(0, 0, 0);
-font-size: 20px;
+font-size: 15px;
 padding: 7px;
 text-shadow: 0px -1px 0px rgba(30, 30, 30, 0.8);
--webkit-border-radius: 31.216216216216218px;
--moz-border-radius: 31.216216216216218px;
-border-radius: 31.216216216216218px;
+-webkit-border-radius: 30px;
+-moz-border-radius: 30px;
+border-radius: 30px;
 background: rgb(208, 213, 213);
 background: -moz-linear-gradient(90deg, rgb(208, 213, 213) 100%, rgb(255, 255, 255) 100%);
 background: -webkit-linear-gradient(90deg, rgb(208, 213, 213) 100%, rgb(255, 255, 255) 100%);
