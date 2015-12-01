@@ -532,6 +532,7 @@ var nxty = {
            uCmd = u8RxBuff[3];
         }
         msgRxLastCmd = uCmd;
+        PrintLog(1, "uCmd="+uCmd + " uCrc="+uCrc);
         
         switch( uCmd )
         {
@@ -1420,7 +1421,9 @@ var nxty = {
                 //                   Raw data of length as found in u8RxBuff[1], 
                 // Rx  ae xx yy 55   50 0  0 0 0 ....  crc
                 //     [0]           [4]        
+                PrintLog(1, "RD 1:" + u8RxBuff[1]);
                 writeNlogFile(u8RxBuff.slice(4, 4+u8RxBuff[1])); //zero based index for start and end of data
+                PrintLog(1, "RD 2");
                 break;
             }
             
