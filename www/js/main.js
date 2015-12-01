@@ -1192,10 +1192,10 @@ var app = {
             "<p align='center'><button id='clear_lock_button_id'     type='button' class='mytextbutton' onclick='app.handleCLockKey()'        >Clear Location Lock</button></p>" +
             "<p align='center'><button id='bypass_cac_button_id'     type='button' class='mytextbutton' onclick='app.handleBypassCacKey()'    >     Bypass CAC     </button></p>" +
             "<p align='center'><button id='limit_printing_button_id' type='button' class='mytextbutton' onclick='app.handleLimitPrintingKey()'>   Reduce Printing  </button></p>" +
+            "<p align='center'><button id='deletefile_button_id'     type='button' class='mytextbutton' onclick='app.handleDeleteFileKey()'   >   Delete Raw File  </button></p>" +
             "<p align='center'><button id='enter_raw_mode_button_id' type='button' class='mytextbutton' onclick='app.handleEnterRawModeKey()' >   Enter Raw Mode   </button></p>" +
             "<p align='center'><button id='send_raw_data_button_id'  type='button' class='mytextbutton' onclick='app.handleSendRawDataKey()'  >   Send Raw Data    </button></p>" +
             "<p align='center'><button id='exit_raw_mode_button_id'  type='button' class='mytextbutton' onclick='app.handleExitRawModeKey()'  >   Exit Raw Mode    </button></p>" +
-            "<p align='center'><button id='deletefile_button_id'     type='button' class='mytextbutton' onclick='app.handleDeleteFileKey()'   >   Delete Raw File  </button></p>" +
             "</div>" +
             
 //            szMyRssiLine +

@@ -435,7 +435,7 @@ function deleteNlogFile()
         g_fileSystemDir.getFile( "wavelog.nlog", {create:false}, 
             function(fileEntry) //sucess handler
             {
-                fileEntry.remove(function(){PrintLog(3,"Success deleting file 'wavelog.nlog'");}, function(err){PrintLog(99, "Could not delete 'wavelog.nlog' file:" + e.code);});
+                fileEntry.remove(function(){PrintLog(1,"Success deleting file 'wavelog.nlog'");}, function(err){PrintLog(99, "Could not delete 'wavelog.nlog' file:" + e.code);});
             },
             function(err) //error handler
             {
