@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.09";
+var szVersion               = "01.00.10";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -1049,6 +1049,12 @@ var app = {
             showAlert("Exit Raw Mode not allowed...", "Bluetooth not connected.");
         }
     },
+    
+    handleDeleteFileKey: function()
+    {
+        deleteNlogFile();
+        showAlert("Raw mode file should now be deleted", "Delete File");
+    },
 
 
     // Handle the Register key response
@@ -1189,6 +1195,7 @@ var app = {
             "<p align='center'><button id='enter_raw_mode_button_id' type='button' class='mytextbutton' onclick='app.handleEnterRawModeKey()' >   Enter Raw Mode   </button></p>" +
             "<p align='center'><button id='send_raw_data_button_id'  type='button' class='mytextbutton' onclick='app.handleSendRawDataKey()'  >   Send Raw Data    </button></p>" +
             "<p align='center'><button id='exit_raw_mode_button_id'  type='button' class='mytextbutton' onclick='app.handleExitRawModeKey()'  >   Exit Raw Mode    </button></p>" +
+            "<p align='center'><button id='deletefile_button_id'     type='button' class='mytextbutton' onclick='app.handleDeleteFileKey()'   >   Delete Raw File  </button></p>" +
             "</div>" +
             
 //            szMyRssiLine +
