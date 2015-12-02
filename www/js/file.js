@@ -457,7 +457,7 @@ function closeNlogFile()
 function writeNlogFile(data)
 {
 PrintLog(1, "WF 3");
-/*    if( bNlogFileWriterOpen )
+    if( bNlogFileWriterOpen )
     {
     PrintLog(1, "WF 4");
         if( bNlogFileWriterBusy == false)
@@ -471,7 +471,7 @@ PrintLog(1, "WF 3");
         }
         else
             PrintLog(99, "  *start write to binfile failed:still busy");
-    }*/
+    }
 PrintLog(1, "WF 8");
 }
 

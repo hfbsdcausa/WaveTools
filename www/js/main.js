@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.18";
+var szVersion               = "01.00.19";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -892,9 +892,10 @@ var app = {
                 var u8TempTxBuff  = new Uint8Array(5);
                 u8TempTxBuff[i++] = NXTY_RAW_MODE_ENTER;
                 
-                nxtyCurrentReq = NXTY_RAW_MODE_REQ;
+                var oldRxBuffIdx = uRxBuffIdx;
                 nxty.SendNxtyMsg(NXTY_RAW_MODE_REQ, u8TempTxBuff, i);
                 window.msgRxLastCmd = NXTY_RAW_MODE_RSP; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
+                uRxBuffIdx = oldRxBuffIdx; //needed to fool the ProcessNxtyRxMsg so that it continues receiving bytes and not reset
             
                 // Start the spinner..
                 bUniiUp = true;
@@ -976,9 +977,10 @@ var app = {
 
 
                 // Deliver byte sequece
-                nxtyCurrentReq = NXTY_RAW_DATA_REQ;
+                var oldRxBuffIdx = uRxBuffIdx;
                 nxty.SendNxtyMsg(NXTY_RAW_DATA_REQ, u8TempTxBuff, i);
                 window.msgRxLastCmd = NXTY_RAW_DATA_IND; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
+                uRxBuffIdx = oldRxBuffIdx; //needed to fool the ProcessNxtyRxMsg so that it continues receiving bytes and not reset
             
                 // Start the spinner..
                 bUniiUp = true;
@@ -1031,9 +1033,10 @@ var app = {
                 var u8TempTxBuff  = new Uint8Array(5);
                 u8TempTxBuff[i++] = NXTY_RAW_MODE_EXIT;
                 
-                nxtyCurrentReq = NXTY_RAW_MODE_REQ;
+                var oldRxBuffIdx = uRxBuffIdx;
                 nxty.SendNxtyMsg(NXTY_RAW_MODE_REQ, u8TempTxBuff, i);
                 window.msgRxLastCmd = NXTY_RAW_MODE_RSP; // needed to fool the SendNxtyMsg otherwise we cannot send the next message
+                uRxBuffIdx = oldRxBuffIdx; //needed to fool the ProcessNxtyRxMsg so that it continues receiving bytes and not reset
             
                 // Start the spinner..
                 bUniiUp = true;
