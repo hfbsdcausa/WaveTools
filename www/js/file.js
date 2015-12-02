@@ -454,7 +454,7 @@ function closeNlogFile()
     }
 }
 
-writeNlogFile: function(data)
+function writeNlogFile(data)
 {
 PrintLog(1, "WF 3");
     if( bNlogFileWriterOpen )

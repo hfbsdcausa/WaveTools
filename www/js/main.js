@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.15";
+var szVersion               = "01.00.16";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -1052,7 +1052,7 @@ var app = {
     
     handleDeleteFileKey: function()
     {
-        PrintLog(1, "delete .nlog file key pressed--------------------------------------");
+        PrintLog(1, "Delete .nlog file key pressed--------------------------------------");
         deleteNlogFile();
         showAlert("Raw mode file should now be deleted", "Delete File");
     },
