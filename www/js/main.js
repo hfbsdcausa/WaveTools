@@ -1055,6 +1055,10 @@ var app = {
         PrintLog(1, "Delete .nlog file key pressed--------------------------------------");
         deleteNlogFile();
         showAlert("Raw mode file should now be deleted", "Delete File");
+        PrintLog(1, "deleteNlogFile=" + deleteNlogFile.toString());
+        PrintLog(1, "closeNlogFile=" + closeNlogFile.toString());
+        PrintLog(1, "openNlogFile=" + openNlogFile.toString());
+        PrintLog(1, "writeNlogFile=" + writeNlogFile.toString());
     },
 
 
