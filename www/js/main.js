@@ -1052,6 +1052,7 @@ var app = {
     
     handleDeleteFileKey: function()
     {
+        PrintLog(1, "delete .nlog file key pressed--------------------------------------");
         deleteNlogFile();
         showAlert("Raw mode file should now be deleted", "Delete File");
     },

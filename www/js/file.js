@@ -455,17 +455,23 @@ function closeNlogFile()
 
 function writeNlogFile(data)
 {
+PrintLog(1, "WF 3");
     if( bNlogFileWriterOpen )
     {
+    PrintLog(1, "WF 4");
         if( bNlogFileWriterBusy == false)
         {
+        PrintLog(1, "WF 5");
             bNlogFileWriterBusy = true;
             var generatedBlob = new Blob([data]);
+            PrintLog(1, "WF 6");
             objNlogFileWriter.write( generatedBlob );
+            PrintLog(1, "WF 7");
         }
         else
-            PrintLog(1, "  *start write to binfile failed:still busy");
+            PrintLog(99, "  *start write to binfile failed:still busy");
     }
+PrintLog(1, "WF 8");
 }
 
 function onOpenNlogFileWriterSuccessCB(fE)
@@ -505,7 +511,7 @@ function onEndNlogFileWriterCB(e)
 function onErrorNlogFileWriterCB(e)
 {
     bNlogFileWriterBusy = false;
-    PrintLog(1, "  *ERROR, end write to binfile");
+    PrintLog(99, "  *ERROR, end write to binfile");
 }
 
 // END Create nlog file and write binary data to it....................................................................
