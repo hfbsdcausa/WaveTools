@@ -93,7 +93,7 @@ function OpenLogFile()
 {
     bfileOpenLogFileSuccess = false;
     fileWriterObject        = null;
-    g_fileSystemDir.getFile( "wavetools.log", {create:true, exclusive: false}, onOpenWriteFileSuccessCB, onOpenWriteFileErrorCB );
+    g_fileSystemDir.getFile( "wavetools.log", {create:true, exclusive:false}, onOpenWriteFileSuccessCB, onOpenWriteFileErrorCB );
 }                  
 
 // WriteLogFile..............................................................................................
@@ -208,7 +208,7 @@ function WriteDownloadFile( fileName, dataObject )
 {
     PrintLog(1, "WriteDownloadFile( " + fileName + ", data )" );
     
-    g_fileSystemDir.getFile( fileName, {create:true, exclusive: false},         // Create a file in the Download (Android) or Documents (IOS) directory 
+    g_fileSystemDir.getFile( fileName, {create:true, exclusive:false},         // Create a file in the Download (Android) or Documents (IOS) directory 
         function(fileEntry)                 // Success
         {
             fileEntry.createWriter(
@@ -457,7 +457,7 @@ function closeNlogFile()
 function writeNlogFile(data)
 {
 PrintLog(1, "WF 3");
-    if( bNlogFileWriterOpen )
+/*    if( bNlogFileWriterOpen )
     {
     PrintLog(1, "WF 4");
         if( bNlogFileWriterBusy == false)
@@ -471,7 +471,7 @@ PrintLog(1, "WF 3");
         }
         else
             PrintLog(99, "  *start write to binfile failed:still busy");
-    }
+    }*/
 PrintLog(1, "WF 8");
 }
 
