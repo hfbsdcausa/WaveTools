@@ -100,9 +100,9 @@ const     NXTY_NAK_TYPE_USB_BUSY        = 0x07;
 
 
 
-var    msgRxLastCmd                     = NXTY_INIT;
+var msgRxLastCmd                        = NXTY_INIT;
 var u8RxBuff                            = new Uint8Array(NXTY_V2_MAX_MSG_SIZE);       // Allow for max V1 msg of 255 bytes or V2 msg of 260 bytes.
-var u8UniqueId                          = new Uint8Array(8)
+var u8UniqueId                          = new Uint8Array(8);
 var uSendCount                          = 0; 
 
 var uRxBuffIdx                          = 0;

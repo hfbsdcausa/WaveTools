@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.12";
+var szVersion               = "01.00.13";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -49,7 +49,7 @@ var szNoStatus              = "No status response from unit so ICD version not k
 // Level  4: Timing loops
 // Level 10: Bluetooth processing.
 // Level 99: Error, print in red.
-var PrintLogLevel = 1;
+var PrintLogLevel = 100;
 
 
 // PrintLog............................................................................................
