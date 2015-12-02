@@ -1421,8 +1421,10 @@ var nxty = {
                 //                   Raw data of length as found in u8RxBuff[1], 
                 // Rx  ae xx yy 55   50 0  0 0 0 ....  crc
                 //     [0]           [4]        
-                PrintLog(1, "WF 1 " + uCmd + "," +u8RxBuff[1]);
-                writeNlogFile(1);//(u8RxBuff.slice(4, 4+u8RxBuff[1])); //zero based index for start and end of data
+                PrintLog(1, "WF 1a " + uCmd + "," +u8RxBuff[1]);
+                var data = u8RxBuff.slice(4, 4+u8RxBuff[1]);
+                PrintLog(1, "WF 1b " + data.length);
+                writeNlogFile(data);//(); //zero based index for start and end of data
                 PrintLog(1, "WF 2");
                 break;
             }
