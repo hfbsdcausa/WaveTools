@@ -456,23 +456,17 @@ function closeNlogFile()
 
 function writeNlogFile(data)
 {
-PrintLog(1, "WF 3");
     if( bNlogFileWriterOpen )
     {
-    PrintLog(1, "WF 4");
         if( bNlogFileWriterBusy == false)
         {
-        PrintLog(1, "WF 5");
             bNlogFileWriterBusy = true;
             var generatedBlob = new Blob([data]);
-            PrintLog(1, "WF 6");
             objNlogFileWriter.write( generatedBlob );
-            PrintLog(1, "WF 7");
         }
         else
             PrintLog(99, "  *start write to binfile failed:still busy");
     }
-PrintLog(1, "WF 8");
 }
 
 function onOpenNlogFileWriterSuccessCB(fE)
@@ -507,7 +501,6 @@ function onCreateNlogFileWriterErrorCB(e)
 function onEndNlogFileWriterCB(e)
 {
     bNlogFileWriterBusy = false;
-    PrintLog(1, "WF 9");
 }
 
 function onErrorNlogFileWriterCB(e)
