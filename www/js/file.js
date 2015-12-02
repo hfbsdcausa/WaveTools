@@ -416,7 +416,7 @@ function openNlogFile()
         bNlogFileWriterOpen = false;
         bNlogFileWriterBusy = false;
         objNlogFileWriter   = null;
-        g_fileSystemDir.getFile( "wavelog.nlog", {create:true, exclusive: false}, onOpenNlogFileWriterSuccessCB, onOpenNlogFileWriterErrorCB );
+        g_fileSystemDir.getFile( "wavelog.nlog", {create:true, exclusive:false}, onOpenNlogFileWriterSuccessCB, onOpenNlogFileWriterErrorCB );
     }
     else
         PrintLog(99, "Filesystem not open, unable to create NlogFile");
@@ -454,7 +454,7 @@ function closeNlogFile()
     }
 }
 
-function writeNlogFile(data)
+writeNlogFile: function(data)
 {
 PrintLog(1, "WF 3");
     if( bNlogFileWriterOpen )

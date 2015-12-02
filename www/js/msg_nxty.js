@@ -1436,7 +1436,7 @@ var nxty = {
 
         // Make sure that we can receive a new message...
         uRxBuffIdx = 0;
-
+        PrintLog(2,  "Msg Rx process done");
           
         return;
     },
