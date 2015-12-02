@@ -1423,9 +1423,9 @@ var nxty = {
                 //     [0]           [4]        
                 var payloadLen = u8RxBuff[1];
                 PrintLog(1, "WF 1a " + uCmd + "," + u8RxBuff[1] + "," + u8RxBuff.length+ "," + payloadLen);
-                if(u8RxBuff.slice === undefined) {PrintLog(1, "u8RxBuff.slice undefined" );}
-                PrintLog(1, "u8RxBuff.slice" + u8RxBuff.slice);
-                var datapayload = u8RxBuff.slice(4, 4+payloadLen);  //zero based index for start and end of data
+                PrintLog(1, "u8RxBuff.subarray=" + u8RxBuff.subarray);
+                PrintLog(1, "u8RxBuff.slice=" + u8RxBuff.slice);
+                var datapayload = u8RxBuff.subarray(4, 4+payloadLen);  //zero based index for start and end of data
                 PrintLog(1, "WF 1b " + datapayload.length );
                 writeNlogFile(datapayload);
                 PrintLog(1, "WF 2");
