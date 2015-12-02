@@ -450,6 +450,7 @@ function closeNlogFile()
     {
          bNlogFileWriterOpen = false;
          objNlogFileWriter = null;
+         PrintLog(1, "Succesfully closed 'wavelog.nlog' file");
     }
 }
 
@@ -506,6 +507,7 @@ function onCreateNlogFileWriterErrorCB(e)
 function onEndNlogFileWriterCB(e)
 {
     bNlogFileWriterBusy = false;
+    PrintLog(1, "WF 9");
 }
 
 function onErrorNlogFileWriterCB(e)
