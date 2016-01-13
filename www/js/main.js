@@ -34,7 +34,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "01.00.25";
+var szVersion               = "01.00.27";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -951,7 +951,7 @@ var app = {
                 regValue     = RX_SEQ_ADDRESS_PATTERN;
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                 // The Address to read
-                regValue     = NXTY_PCCTRL_GLOBALFLAGS; //NXTY_PCCTRL_CLOUD_INFO;
+                regValue     = NXTY_PCCTRL_GLOBALFLAGS; //0xF0000038
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
 
                 // Write SelParamReg.Val = CloudBuffAddr : this sends the command to Ares, it will return the value in the raw bytes somewhere in NXTY_RAW_DATA_IND
@@ -961,7 +961,7 @@ var app = {
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                 regValue     = RX_SEQ_ADDRESS_PATTERN;
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
-                regValue     = NXTY_PCCTRL_SELPARAM_REG;
+                regValue     = NXTY_PCCTRL_SELPARAM_REG; //0xF0000020
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                   //... also need to send RX_SEQ_WRITE_PATTERN but usually only after board confirms the write address, the value we want to write and the previous value (DbgWriteValue, DbgReadAddress, DbgReadValue, DbgReadValue)
                 regValue     = RX_SEQ_WRITE_PATTERN;
@@ -972,7 +972,7 @@ var app = {
                 regValue     = RX_SEQ_ADDRESS_PATTERN;
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
                 // The Address to read
-                regValue     = NXTY_PCCTRL_SELPARAM_REG;
+                regValue     = NXTY_PCCTRL_SELPARAM_REG; //0xF0000020
                   u8TempTxBuff[i++] = regValue;   u8TempTxBuff[i++] = (regValue >> 8);   u8TempTxBuff[i++] = (regValue >> 16);   u8TempTxBuff[i++] = (regValue>>24); // FW needs this in LE format
 
 

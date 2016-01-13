@@ -430,7 +430,7 @@ var nxty = {
     ProcessNxtyRxMsg: function( pRxMsgData, uLenByte )
     {
         var i;
-        var    bOk       = false;
+        var bOk       = false;
         var bV2Msg    = false;
         var uRxMsgLen = NXTY_BIG_MSG_SIZE;
         

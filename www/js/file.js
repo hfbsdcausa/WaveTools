@@ -486,7 +486,8 @@ function onCreateNlogFileWriterSuccessCB(fW)
 
     fW.onwriteend = onEndNlogFileWriterCB;      // Called when the file is written to
     fW.onerror    = onErrorNlogFileWriterCB;    // Called when the write has failed
-    fW.seek(fW.length);                         // Move to end of file
+    fW.seek(0);                                 // Move to end of file
+    fW.truncate(0);
 
     objNlogFileWriter = fW;
     bNlogFileWriterOpen = true;
